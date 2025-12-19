@@ -34,9 +34,6 @@ jobs:
       - name: "Build the contracts and print their size"
         run: "forge build --sizes"
 
-      - name: "Show the Foundry config"
-        run: "forge config"
-
       - name: "Generate weekly fuzz seed"
         run: >
           echo "FOUNDRY_FUZZ_SEED=$(
