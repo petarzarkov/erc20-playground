@@ -1,29 +1,20 @@
 {
-  "name": "@prb/foundry-template",
-  "description": "Foundry-based template for developing Solidity smart contracts",
+  "name": "@petarzarkov/erc-playground",
+  "description": "Foundry-based playground for developing Solidity smart contracts",
   "private": true,
   "version": "1.0.0",
   "author": {
-    "name": "Paul Razvan Berg",
-    "url": "https://github.com/PaulRBerg"
+    "name": "Petar Zarkov",
+    "url": "https://github.com/petarzarkov"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "5.3.0"
+    "@openzeppelin/contracts": "5.4.0"
   },
   "devDependencies": {
     "forge-std": "github:foundry-rs/forge-std#v1.9.7",
-    "prettier": "^3.5",
-    "solhint": "^5.1"
+    "prettier": "3.7.4",
+    "solhint": "6.0.2"
   },
-  "keywords": [
-    "blockchain",
-    "ethereum",
-    "forge",
-    "foundry",
-    "smart-contracts",
-    "solidity",
-    "template"
-  ],
   "scripts": {
     "clean": "rm -rf cache out",
     "build": "forge build",
@@ -33,6 +24,8 @@
     "lint:sol": "bun run forge-check && bun solhint \"{script,src,tests}/**/*.sol\"",
     "prettier:check": "prettier --check \"**/*.{json,md,yml}\"",
     "prettier:write": "prettier --write \"**/*.{json,md,yml}\"",
-    "test": "forge test"
+    "test": "forge test",
+    "deploy": "forge script script/Deploy.s.sol:Deploy --rpc-url $RPC_URL --private-key $PRIVATE_KEY --broadcast --verify --etherscan-api-key $API_KEY_ETHERSCAN -vvvv",
+    "verify": "forge verify-contract --chain-id $CHAIN_ID $CONTRACT_ADDRESS src/PeepoToken.sol:PeepoToken --watch"
   }
 }

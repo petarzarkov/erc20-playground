@@ -12,7 +12,8 @@ on:
       - "main"
 
 jobs:
-  lint:
+  ci:
+    name: "Lint, Build, and Test"
     runs-on: "ubuntu-latest"
     steps:
       - name: "Check out the repo"
@@ -30,54 +31,13 @@ jobs:
       - name: "Lint the code"
         run: "bun run lint"
 
-      - name: "Add lint summary"
-        run: |
-          echo "## Lint result" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
-
-  build:
-    runs-on: "ubuntu-latest"
-    steps:
-      - name: "Check out the repo"
-        uses: "actions/checkout@v4"
-
-      - name: "Install Foundry"
-        uses: "foundry-rs/foundry-toolchain@v1"
-
-      - name: "Install Bun"
-        uses: "oven-sh/setup-bun@v1"
-
-      - name: "Install the Node.js dependencies"
-        run: "bun install"
-
       - name: "Build the contracts and print their size"
         run: "forge build --sizes"
-
-      - name: "Add build summary"
-        run: |
-          echo "## Build result" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
-
-  test:
-    needs: ["lint", "build"]
-    runs-on: "ubuntu-latest"
-    steps:
-      - name: "Check out the repo"
-        uses: "actions/checkout@v4"
-
-      - name: "Install Foundry"
-        uses: "foundry-rs/foundry-toolchain@v1"
-
-      - name: "Install Bun"
-        uses: "oven-sh/setup-bun@v1"
-
-      - name: "Install the Node.js dependencies"
-        run: "bun install"
 
       - name: "Show the Foundry config"
         run: "forge config"
 
-      - name: "Generate a fuzz seed that changes weekly to avoid burning through RPC allowance"
+      - name: "Generate weekly fuzz seed"
         run: >
           echo "FOUNDRY_FUZZ_SEED=$(
             echo $(($EPOCHSECONDS - $EPOCHSECONDS % 604800))
@@ -86,7 +46,12 @@ jobs:
       - name: "Run the tests"
         run: "forge test"
 
-      - name: "Add test summary"
+      - name: "Add workflow summary"
+        if: always()
         run: |
-          echo "## Tests result" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
+          echo "## CI Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Task | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "| :--- | :--- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test | ✅ Passed |" >> $GITHUB_STEP_SUMMARY

@@ -24,12 +24,20 @@ abstract contract BaseScript is Script {
     ///
     /// The use case for $ETH_FROM is to specify the broadcaster key and its address via the command line.
     constructor() {
-        address from = vm.envOr({ name: "ETH_FROM", defaultValue: address(0) });
-        if (from != address(0)) {
-            broadcaster = from;
+        // If a PRIVATE_KEY is provided in .env, use it to derive the broadcaster
+        uint256 privKey = vm.envOr("PRIVATE_KEY", uint256(0));
+
+        if (privKey != 0) {
+            broadcaster = vm.rememberKey(privKey);
         } else {
-            mnemonic = vm.envOr({ name: "MNEMONIC", defaultValue: TEST_MNEMONIC });
-            (broadcaster,) = deriveRememberKey({ mnemonic: mnemonic, index: 0 });
+            // Fallback to the template's logic
+            address from = vm.envOr({ name: "ETH_FROM", defaultValue: address(0) });
+            if (from != address(0)) {
+                broadcaster = from;
+            } else {
+                mnemonic = vm.envOr({ name: "MNEMONIC", defaultValue: TEST_MNEMONIC });
+                (broadcaster,) = deriveRememberKey({ mnemonic: mnemonic, index: 0 });
+            }
         }
     }
 
