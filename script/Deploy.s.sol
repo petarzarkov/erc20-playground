@@ -6,8 +6,8 @@ import { PeepoToken } from "../src/PeepoToken.sol";
 import { BaseScript } from "./Base.s.sol";
 
 contract Deploy is BaseScript {
-    function run() public broadcast returns (PeepoToken peepoToken) {
-        uint256 initialSupply = 0.1 ether;
-        peepoToken = new PeepoToken(initialSupply);
-    }
+  function run() public broadcast returns (PeepoToken peepoToken) {
+    uint256 initialSupply = 0.1 ether;
+    peepoToken = new PeepoToken(initialSupply);
+  }
 }

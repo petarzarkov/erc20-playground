@@ -1,5 +1,13 @@
 printWidth: 80
+tabWidth: 2
+useTabs: false
+singleQuote: false
+quoteProps: "as-needed"
+jsxSingleQuote: false
 trailingComma: "all"
+bracketSpacing: true
+arrowParens: "always"
+endOfLine: "lf"
 overrides:
   - files: "*.md"
     options:
