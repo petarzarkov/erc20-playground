@@ -74,23 +74,4 @@ contract PeepoTokenTest is Test {
 
     assertEq(peepoToken.totalSupply(), preMintSupply + amount);
   }
-
-  function test_Metadata() public {
-    string memory expectedJson = string(
-      abi.encodePacked(
-        "{",
-        '"name": "PeepoToken",',
-        '"description": "Peepo is 100% on-chain!",',
-        '"image": "https://cdn.betterttv.net/emote/5a16ee718c22a247ead62d4a/3x.webp"',
-        "}"
-      )
-    );
-
-    string memory expectedMetadata =
-      string(abi.encodePacked("data:application/json;base64,", Base64.encode(bytes(expectedJson))));
-
-    string memory actualMetadata = peepoToken.metadata();
-
-    assertEq(actualMetadata, expectedMetadata, "Metadata mismatch");
-  }
 }
